@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 export default function Synth({synth}) {
-  const [volLevel, setVolLevel]= useState(-20)
+  const [volLevel, setVolLevel]= useState('-20')
   const [freqLevel, setFreqLevel]= useState(synth.frequency.value)
   const [detune, setDetune]= useState(synth.detune.value)
 
@@ -42,9 +42,9 @@ export default function Synth({synth}) {
     <div style={{display:'flex'}}>
       <div>
       <h4>Volume</h4>
-      <input value={volLevel} step={.1} min={`-20`} max={50} onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
+      <input value={volLevel} step={.1} min={`-20`} max={20} onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
       <h4>Frequency</h4>
-      <input value={freqLevel} step={1}max={600} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
+      <input value={freqLevel} step={1}max={2500} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
       <h4>Detune</h4>
       <input value={detune} step={.1} onChange={(e)=> updateSynth(e)} id='detune' type='range'/>
       </div>
