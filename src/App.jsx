@@ -1,56 +1,99 @@
 import './App.css'
 import { useState } from 'react';
 import Synth from './components/Synth'
+import Header from './components/Header'
 import * as Tone from 'tone'
 import { v4 as uuidv4 } from 'uuid';
-// import Grid from '@mui/material/Grid';
+import { Grid,Button } from '@mui/material';
 
 function App() {
   const [synthBank, setSynthBank]=useState([])
+
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
-    const synth = new Tone.Synth().toDestination()
+    const synth = new Tone.Synth()
     synth.id= uuidv4()
+    synth.volume.value='-60'
     synth.effectsRack=[]
-    console.log('synth: ',synth)
     synthBankCopy.push(synth)
     setSynthBank(synthBankCopy)
   }
-
   const deleteSynth=(e)=>{
-    console.log(e.target.id)
     const synthBankCopy=synthBank
-     console.log(synthBankCopy)
      synthBank[e.target.id].disconnect()
      synthBankCopy.splice(e.target.id,1)
     setSynthBank([...synthBankCopy])
   }
 
+
+  const addEffect=(e, id)=>{
+    let synthBankCopy=[...synthBank]
+    const {value} = e.target
+    console.log(id)
+    if(!value){
+      alert('no effect selected')
+    }
+    if(value==='reverb'){
+      let reverb = new Tone.Reverb()
+      let foundSynth = synthBankCopy.find(synth=>{
+        console.log('synth in synthback: ',synth.id)
+        console.log('id supplied: ',id)
+        return synth.id==id
+      })
+      foundSynth.effectsRack.push(reverb)
+      console.log('found: ',foundSynth)
+      foundSynth.chain(reverb, Tone.Destination)
+      setSynthBank(synthBankCopy)
+    }
+    
+  }
+
+
+console.log(synthBank)
   return (
-    <div className="App">
-
-<button onClick={newSynth} style={{backgroundColor:'white', color:'black'}}>New Synth</button>
-
-    {synthBank&&synthBank.length>0?(
-      <ul>
-        {synthBank.map((synth,i)=>{
-          return (
-            <div style={{display:'flex'}}>
-              <div>
-                <Synth id={synth.id} synth={synth}/>
-              </div>
-                <div style={{display:'flex', alignItems:'center'}}>
-                  <button onClick={e=>deleteSynth(e)} id={i} style={{backgroundColor:'white', color:'black',height:'max-content'}}>delete</button>
-                </div>
-              </div>
+    <Grid container className="App">
+        
+      <Header id='header' newSynth={newSynth}/>
+        
+        {synthBank&&synthBank.length>0?(
+        
+          <Grid container className='synthBank' gap={2} >
+            {synthBank.map((synth,i)=>{
+              return (
+                <Grid key={`synth_${i}`} container gap={2} item xs={12} className='synthRack'>
+                  <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >
+                    <Synth id={synth.id} synth={synth}/>
+                    <select  id='effect_selection' value='' onChange={e=>addEffect(e,synth.id)}>
+                      <option value='' disabled hidden>Effects</option>
+                      <option value='reverb'>Reverb</option>
+                    </select>
+                    <Button variant='contained' color='error' onClick={e=>deleteSynth(e)} id={i} className='btn'>delete</Button>
+                  </Grid>
+                  <Grid item xs={2} className='visualizer'>
+                    <p>placeholder for visualizer</p>
+                  </Grid>
+                  <Grid container item xs={8} className='effectsRack'>
+                    {synth.effectsRack.length>0?(
+                      synth.effectsRack.map((effect,i)=>{
+                      return (
+                        <Grid item>
+                          <p>{effect.name}</p>
+                        </Grid>
+                      )  
+                    })
+                  ):(null)
+              }
+                  </Grid>
+                </Grid>     
               )
-        })}
-      </ul>  
+          })}
+          </Grid>
+
     ):(
       null
       )
     } 
-    </div>
+    </Grid>
   )
 }
 

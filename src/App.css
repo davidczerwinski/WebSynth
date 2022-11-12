@@ -1,9 +1,54 @@
 #root {
-  
-  margin: 0 auto;
+  height: 100vh;
+  width: 100vw;
+}
+
+.App {
   padding: 2rem;
-  text-align: center;
+  overflow-y: scroll;
+}
+.btn {
+  text-align:center;
+  background-color:white;
+  color:black;
+}
+
+.pwr-btn {
+  filter: drop-shadow(0 0 5px rgba(34, 153, 30, 0.735));
+}
+.float-btn {
+  position:fixed;
+	right:40px;
+	text-align:center;
+  background-color:white;
+  color:black;
+}
+#header {
+  box-shadow: 3px 3px 3px #999
+}
+
+.synthBank {
+  padding:5px;
+  background-color:rgba(196, 196, 196, 0.333);
+}
+
+.synthRack {
+  border:1px lid white;
+  padding: 5px;
+  background-color:#eee5;
+}
+
+.synthBlock{
+  padding: 5px;
+  background-color:  rgb(39, 40, 47);
+}
+.effectsRack {
+  background-color: rgb(149, 157, 164);
 }
 
 
-
+.visualizer {
+  color: black;
+  background-color: gainsboro;
+  border: 1px solid black;
+}
