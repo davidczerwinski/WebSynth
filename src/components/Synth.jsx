@@ -1,23 +1,28 @@
 import React from 'react'
 import { useState } from 'react';
-import {Button, Grid} from '@mui/material';
-
+import {Button, Grid, IconButton } from '@mui/material';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 export default function Synth({synth}) {
+  const [power, setPower]=useState(false)
   const [oscType, setOscType]= useState(synth.oscillator.type)
   const [volLevel, setVolLevel]= useState(synth.volume.value)
   const [freqLevel, setFreqLevel]= useState(synth.frequency.value)
   const [detune, setDetune]= useState(synth.detune.value)
+  const [phase, setPhase]= useState(synth.oscillator.phase)
 
   const updateSynth=(e)=>{
-
     const {value}=e.target
     let prop = e.target.id
-    if( prop==='oscillator'){
+
+    if ( prop==='oscillator') {
       synth[prop].type=value
         setOscType(value)
-
-    }else{
+    } else if (prop==='phase') {
+      synth.oscillator.phase=value
+      console.log(synth.oscillator.phase)
+      setPhase(value)
+    } else {
       synth[prop].value=value
     }
 
@@ -34,36 +39,59 @@ export default function Synth({synth}) {
         setDetune(value)
         break;
       
+      case 'phase':
+        setPhase(value)
+        break;
+      
       default:
         break;
     }
   }
 
-  const start = async ()=>{
-    await synth.triggerAttack(synth.frequency.value)
+  const togglePower=async (e)=>{
+    e.preventDefault()
+    if(!power){
+      await synth.triggerAttack(synth.frequency.value)
+      setPower(true)
+    }else{
+      await synth.triggerRelease()
+      setPower(false)
+    }
   }
-  const stop = ()=>{
-    synth.triggerRelease()
-  }
-
 
   return (
-    <Grid container direction='column'display='flex'>
-      <select id='oscillator' value={oscType} onChange={(e)=>updateSynth(e)}>
+    <Grid container alignItems='center' direction='column'>
+      <Grid item style={{}}>
+      <PowerSettingsNewIcon  fontSize='large' className='pwr-btn' onClick={(e)=>togglePower(e)} color={(power?'success':'default')}/>
+      </Grid>
+      <Grid item>
+        <select id='oscillator' value={oscType} onChange={(e)=>updateSynth(e)}>
         <option value='sine'> Sine</option>
         <option value='triangle'> Triangle</option>
         <option value='square'> Square</option>
         <option value='sawtooth'> Sawtooth</option>
-      </select><Grid item>
-      <h4>Volume</h4>
-      <input value={volLevel} step={.1} min={'-60'} max={10}onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
-      <h4>Frequency</h4>
-      <input value={freqLevel} step={1}max={600} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
-      <h4>Detune</h4>
-      <input value={detune} step={.1} onChange={(e)=> updateSynth(e)} id='detune' type='range'/>
+      </select>
       </Grid>
-      <Button style={{backgroundColor:'white', color:'black'}} onClick={start}>start</Button>
-      <Button style={{backgroundColor:'white', color:'black'}} onClick={stop}>stop</Button>
+      
+      <Grid item container>
+        <Grid item>
+          <h6>Volume</h6>
+          <input value={volLevel} step={.1} min={'-60'} max={25}onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
+        </Grid>
+        <Grid item>
+          <h6>Frequency</h6>
+          <input value={freqLevel} step={1}max={880} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
+        </Grid>
+        <Grid item>
+          <h6>Detune</h6>
+          <input value={detune} step={.1} min={'-100'} onChange={(e)=> updateSynth(e)} id='detune' type='range'/>
+        </Grid>
+        <Grid item>
+          <h6>Phase</h6>
+          <input value={phase} max={360} onChange={(e)=> updateSynth(e)} id='phase' type='range'/>
+        </Grid>
+      </Grid>
+      
     </Grid>
   )
 }
