@@ -14,7 +14,7 @@
 }
 
 .pwr-btn {
-  filter: drop-shadow(0 0 2px rgba(34, 153, 30, 0.735));
+  filter: drop-shadow(0 0 5px rgba(34, 153, 30, 0.735));
 }
 .float-btn {
   position:fixed;
