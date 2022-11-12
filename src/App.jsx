@@ -8,11 +8,10 @@ import { Grid,Button } from '@mui/material';
 
 function App() {
   const [synthBank, setSynthBank]=useState([])
+
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
-    const synth = new Tone.Synth().toDestination()
-    // const tremolo = new Tone.Tremolo(9, 0.75).toDestination().start();
-    // synth.connect(tremolo)
+    const synth = new Tone.Synth()
     synth.id= uuidv4()
     synth.volume.value='-60'
     synth.effectsRack=[]
@@ -25,18 +24,32 @@ function App() {
      synthBankCopy.splice(e.target.id,1)
     setSynthBank([...synthBankCopy])
   }
-  const addEffect=(e)=>{
-    // console.log(synth.id)
-    console.log(e)
+
+
+  const addEffect=(e, id)=>{
+    let synthBankCopy=[...synthBank]
     const {value} = e.target
+    console.log(id)
     if(!value){
       alert('no effect selected')
     }
     if(value==='reverb'){
-
+      let reverb = new Tone.Reverb()
+      let foundSynth = synthBankCopy.find(synth=>{
+        console.log('synth in synthback: ',synth.id)
+        console.log('id supplied: ',id)
+        return synth.id==id
+      })
+      foundSynth.effectsRack.push(reverb)
+      console.log('found: ',foundSynth)
+      foundSynth.chain(reverb, Tone.Destination)
+      setSynthBank(synthBankCopy)
     }
+    
   }
 
+
+console.log(synthBank)
   return (
     <Grid container className="App">
         
@@ -47,10 +60,10 @@ function App() {
           <Grid container className='synthBank' gap={2} >
             {synthBank.map((synth,i)=>{
               return (
-                <Grid key={synth.id} container gap={2} item xs={12} className='synthRack'>
-                  <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={`synth_${i}`} >
+                <Grid key={`synth_${i}`} container gap={2} item xs={12} className='synthRack'>
+                  <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >
                     <Synth id={synth.id} synth={synth}/>
-                    <select  id='effect_selection' defaultValue='' onChange={e=>addEffect(e)}>
+                    <select  id='effect_selection' value='' onChange={e=>addEffect(e,synth.id)}>
                       <option value='' disabled hidden>Effects</option>
                       <option value='reverb'>Reverb</option>
                     </select>
@@ -64,7 +77,7 @@ function App() {
                       synth.effectsRack.map((effect,i)=>{
                       return (
                         <Grid item>
-                          <p>placeholder</p>
+                          <p>{effect.name}</p>
                         </Grid>
                       )  
                     })

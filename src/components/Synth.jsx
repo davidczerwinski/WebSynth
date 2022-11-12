@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react';
-import {Button, Grid, IconButton } from '@mui/material';
+import { Grid } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 export default function Synth({synth}) {
@@ -14,7 +14,6 @@ export default function Synth({synth}) {
   const updateSynth=(e)=>{
     const {value}=e.target
     let prop = e.target.id
-
     if ( prop==='oscillator') {
       synth[prop].type=value
         setOscType(value)
@@ -22,27 +21,20 @@ export default function Synth({synth}) {
       synth.oscillator.phase=value
       console.log(synth.oscillator.phase)
       setPhase(value)
+    } else if (prop==='volume') {
+      synth.volume.value=value
+        setVolLevel(value)
+    } else if(prop === 'frequency'){
+      synth[prop].value=value
+      setFreqLevel(value)
     } else {
       synth[prop].value=value
     }
 
     switch (prop) {
-      case 'frequency':
-        setFreqLevel(value)
-        break;
-      
-      case 'volume':
-        setVolLevel(value)
-        break;
-      
       case 'detune':
         setDetune(value)
         break;
-      
-      case 'phase':
-        setPhase(value)
-        break;
-      
       default:
         break;
     }
@@ -51,7 +43,8 @@ export default function Synth({synth}) {
   const togglePower=async (e)=>{
     e.preventDefault()
     if(!power){
-      await synth.triggerAttack(synth.frequency.value)
+      synth.toDestination()
+      await synth.triggerAttack(freqLevel)
       setPower(true)
     }else{
       await synth.triggerRelease()
@@ -76,11 +69,11 @@ export default function Synth({synth}) {
       <Grid item container>
         <Grid item>
           <h6>Volume</h6>
-          <input value={volLevel} step={.1} min={'-60'} max={25}onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
+          <input value={volLevel} step={1} min={'-60'} max={60}onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
         </Grid>
         <Grid item>
           <h6>Frequency</h6>
-          <input value={freqLevel} step={1}max={880} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
+          <input value={freqLevel} step={.001} max={880} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
         </Grid>
         <Grid item>
           <h6>Detune</h6>
