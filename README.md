@@ -33,6 +33,7 @@ An open-source modular synthesizer including multiple effects
 
 ## Future Development
 
+- Add gain node between synth/effect chain and master gain to try and normalize volume
 - Delete effect
 - Bypass effect
 - Reposition effects in chain
