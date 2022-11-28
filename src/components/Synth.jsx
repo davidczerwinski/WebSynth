@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 export default function Synth({synth}) {
-  const [power, setPower]=useState(false)
+  const [power, setPower]=useState(synth.power)
   const [oscType, setOscType]= useState(synth.oscillator.type)
   const [volLevel, setVolLevel]= useState(synth.volume.value)
   const [freqLevel, setFreqLevel]= useState(synth.frequency.value)
@@ -43,18 +43,19 @@ export default function Synth({synth}) {
   const togglePower=async (e)=>{
     e.preventDefault()
     if(!power){
-      synth.toDestination()
       await synth.triggerAttack(freqLevel)
+      synth.power=true
       setPower(true)
     }else{
       await synth.triggerRelease()
+      synth.power=false
       setPower(false)
     }
   }
-
+console.log(synth)
   return (
     <Grid container alignItems='center' direction='column'>
-      <Grid item style={{}}>
+      <Grid item>
       <PowerSettingsNewIcon  fontSize='large' className='pwr-btn' onClick={(e)=>togglePower(e)} color={(power?'success':'default')}/>
       </Grid>
       <Grid item>
