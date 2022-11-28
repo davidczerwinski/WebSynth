@@ -6,7 +6,7 @@ Using Tone.js to create a massive noise generator for anyone interested in learn
 
 ## Description
 
-Currently constructing bits and pieces of a virtual modular synthesizer in order to create an open source answer for the everyman.
+An open-source modular synthesizer including multiple effects
 
 ## Table of Contents
 * [Description](#description)
