@@ -1,8 +1,10 @@
 # WebSynth
 
-## Description
+🔨 *WIP* 🔨
 
-~**~WIP~**~
+Using Tone.js to create a massive noise generator for anyone interested in learning sound synthesis
+
+## Description
 
 An open-source modular synthesizer including multiple effects
 
@@ -20,12 +22,14 @@ An open-source modular synthesizer including multiple effects
 <br>
 *Currently working out nonlinear volume controls and limits*
 - Add an oscillator
+
 <br>
  *Add another if you want!*
 - Choose from the desired effects everyone knows and loves!
 <br>
 *WIP! Expect more to come!* 
 - When you're done with an oscillator or effect, press delete to disconnect the desired synth from the output
+
 - Have fun!
 
 ## Future Development
