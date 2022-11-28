@@ -18,18 +18,24 @@ An open-source modular synthesizer including multiple effects
 
 ## Usage
 
-- **! ! PLEASE WATCH YOUR VOLUME ! !**
-<br>
-*Currently working out nonlinear volume controls and limits*
-- Add an oscillator
+**! ! PLEASE WATCH YOUR VOLUME ! !**
 
+<br><br/>
+
+*Currently working out nonlinear volume controls and limits*
+
+<br/><br/>
+
+- Add an oscillator
 <br>
  *Add another if you want!*
+ <br><br>
 - Choose from the desired effects everyone knows and loves!
 <br>
 *WIP! Expect more to come!* 
+<br><br>
 - When you're done with an oscillator or effect, press delete to disconnect the desired synth from the output
-
+<br><br>
 - Have fun!
 
 ## Future Development
