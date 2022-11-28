@@ -15,11 +15,27 @@ An open-source modular synthesizer including multiple effects
 
 ## Usage
 
+- **! ! PLEASE WATCH YOUR VOLUME ! !**
+<br>
+*Currently working out nonlinear volume controls and limits*
 - Add an oscillator
-- Add another if you want!
-- *~WIP~* Choose from the desired effects everyone knows and loves!
-- When you're done with an oscillator, press delete to disconnect the desired synth from the output
+<br>
+ *Add another if you want!*
+- Choose from the desired effects everyone knows and loves!
+<br>
+*WIP! Expect more to come!* 
+- When you're done with an oscillator or effect, press delete to disconnect the desired synth from the output
 - Have fun!
+
+## Future Development
+
+- Delete effect
+- Bypass effect
+- Reposition effects in chain
+- Non-linear volume controls
+- ADD ALL THE EFFECTS!
+- Different sounds!
+- Save that beautiful rack
 
 ## Deployment
 
