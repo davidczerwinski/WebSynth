@@ -57,14 +57,6 @@ function App() {
       foundSynth.effectsRack.push(distortion);
     }
     
-    if(value==='freeverb'){
-      let freeverb = new Tone.Freeverb();
-      freeverb.wet.value=0
-      freeverb.id = uuidv4();
-      freeverb.synth_id=foundSynth.id;
-      freeverb.power = false
-      foundSynth.effectsRack.push(freeverb);
-    }
     if(value==='bitCrusher'){
       let crusher = new Tone.BitCrusher();
       crusher.wet.value=0
@@ -110,7 +102,6 @@ function App() {
                       <option value='' disabled hidden>Effects</option>
                       <option value='reverb'>Reverb</option>
                       <option value='distortion'>Distortion</option>
-                      <option value='freeverb'>Freeverb</option>
                       <option value='bitCrusher'>BitCrusher</option>
                       <option value='delay'>Delay</option>
                     </select>

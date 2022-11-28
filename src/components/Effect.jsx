@@ -2,29 +2,29 @@ import React, {useState} from 'react'
 import { Grid} from '@mui/material'
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
-
 export default function Effect({effect, placement, synth}) {
   const [effectObj, setEffectObj] = useState({...effect});
   const props = effect.get()
-  console.log('effect copy', effectObj)
-  console.log('can edit in effect: ', props)
-  console.log(effect  )
 
-  const togglePower=(e)=>{
-    let effectCopy = {...effectObj}
-    e.preventDefault()
-    if(!effect.power){
-      effect.power = true
-      effectObj.power=true
-      setEffectObj(effectCopy)
-    }else{
-      effect.power = false
-      effect.wet.value=0
-      effectObj.wet.value=0
-      effectObj.power=false
-      setEffectObj(effectCopy)
-    }
-  }
+  console.log('names!: ', effect.name)
+
+
+    //effect node bypass
+  // const togglePower=(e)=>{
+  //   let effectCopy = {...effectObj}
+  //   e.preventDefault()
+  //   if(!effect.power){
+  //     effect.power = true
+  //     effectObj.power=true
+  //     setEffectObj(effectCopy)
+  //   }else{
+  //     effect.power = false
+  //     effectObj.power=false
+  //     effect.wet.value=0
+  //     effectObj.wet.value=0
+  //     setEffectObj(effectCopy)
+  //   }
+  // }
 
   const editEffectSetting = (e)=>{
     const effectCopy= {...effectObj}
@@ -46,7 +46,7 @@ export default function Effect({effect, placement, synth}) {
 
       return (
 
-        <Grid item container textAlign='center' direction='column'>
+        <Grid item container sx={styles[effect.name]}textAlign='center' direction='column'>
           <Grid item> 
           {effect.name}
           </Grid>
@@ -105,4 +105,20 @@ export default function Effect({effect, placement, synth}) {
 {displayEffect()}
     </Grid>
   )
+}
+
+
+let styles = {
+  Reverb: {
+    backgroundColor:'red'
+  },
+  Distortion: {
+    backgroundColor:'blue'
+  },
+  BitCrusher: {
+    backgroundColor:'orange'
+  },
+  FeedbackDelay: {
+    backgroundColor:'purple'
+  },
 }
