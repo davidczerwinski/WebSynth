@@ -21,8 +21,6 @@ An open-source modular synthesizer including multiple effects
 
 **! ! PLEASE WATCH YOUR VOLUME ! !**
 <br><br/>
-*Currently working out nonlinear volume controls and limits*
-<br/><br/>
 - Add an oscillator<br>*Add another if you want!*
  <br><br>
 - Choose from the desired effects everyone knows and loves!<br>*WIP! Expect more to come!* 
@@ -34,6 +32,7 @@ An open-source modular synthesizer including multiple effects
 ## Future Development
 
 - Add gain node between synth/effect chain and master gain to try and normalize volume
+- Nonlinear volume controls
 - Delete effect
 - Bypass effect
 - Reposition effects in chain
