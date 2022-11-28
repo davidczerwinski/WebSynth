@@ -9,6 +9,7 @@ An open-source modular synthesizer including multiple effects
 ## Table of Contents
 * [Description](#description)
 * [Usage](#usage)
+* [Future Development](#future-development)
 * [Deployment](#deployment)
 * [Repository](#repository)
 * [Contact](#contact)
