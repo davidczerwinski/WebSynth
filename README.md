@@ -20,13 +20,10 @@ An open-source modular synthesizer including multiple effects
 
 
 **! ! PLEASE WATCH YOUR VOLUME ! !**
-<br><br/>
+<br>
 - Add an oscillator<br>*Add another if you want!*
- <br><br>
 - Choose from the desired effects everyone knows and loves!<br>*WIP! Expect more to come!* 
-<br><br>
 - When you're done with an oscillator or effect, press delete to disconnect the desired synth from the output
-<br><br>
 - Have fun!
 
 ## Future Development
