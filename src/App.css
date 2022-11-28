@@ -46,9 +46,15 @@
   background-color: rgb(149, 157, 164);
 }
 
-
 .visualizer {
   color: black;
   background-color: gainsboro;
+  border: 1px solid black;
+}
+
+.effect {
+  display: flex;
+  flex-direction: row;
+  width: auto;
   border: 1px solid black;
 }
