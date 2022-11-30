@@ -1,30 +1,26 @@
 import React, {useState} from 'react'
-import { Grid} from '@mui/material'
+import { Grid, Typography} from '@mui/material'
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
-
 
 export default function Effect({effect, placement, synth}) {
   const [effectObj, setEffectObj] = useState({...effect});
   const props = effect.get()
-  console.log('effect copy', effectObj)
-  console.log('can edit in effect: ', props)
-  console.log(effect  )
-
-  const togglePower=(e)=>{
-    let effectCopy = {...effectObj}
-    e.preventDefault()
-    if(!effect.power){
-      effect.power = true
-      effectObj.power=true
-      setEffectObj(effectCopy)
-    }else{
-      effect.power = false
-      effect.wet.value=0
-      effectObj.wet.value=0
-      effectObj.power=false
-      setEffectObj(effectCopy)
-    }
-  }
+    //effect node bypass
+  // const togglePower=(e)=>{
+  //   let effectCopy = {...effectObj}
+  //   e.preventDefault()
+  //   if(!effect.power){
+  //     effect.power = true
+  //     effectObj.power=true
+  //     setEffectObj(effectCopy)
+  //   }else{
+  //     effect.power = false
+  //     effectObj.power=false
+  //     effect.wet.value=0
+  //     effectObj.wet.value=0
+  //     setEffectObj(effectCopy)
+  //   }
+  // }
 
   const editEffectSetting = (e)=>{
     const effectCopy= {...effectObj}
@@ -46,9 +42,9 @@ export default function Effect({effect, placement, synth}) {
 
       return (
 
-        <Grid item container textAlign='center' direction='column'>
+        <Grid item container sx={styles[effect.name]} style={{padding: '10px 5px', borderRadius:'5px', border:'1px solid #27282F5e'}} textAlign='center' direction='column' justifyContent='space-around'>
           <Grid item> 
-          {effect.name}
+          <Typography>{effect.name}</Typography>
           </Grid>
           <Grid item>
             <PowerSettingsNewIcon  fontSize='large' className='pwr-btn' color={((effect.wet.value>0)?'success':'default')}/>
@@ -57,7 +53,6 @@ export default function Effect({effect, placement, synth}) {
 
           {effectSettings.map(( setting, i)=>{
 
-            console.log(`checking ${setting[0]}`,effect[setting[0]]?.value? effect[setting[0]]?.value : effect[setting[0]] )
             if (setting[0] === 'maxDelay') {return null} 
             if (setting[0] === 'wet' || setting[0] === 'feedback' || setting[0] === 'delayTime' || setting[0] === 'roomSize'  ) {
               return( 
@@ -90,8 +85,8 @@ export default function Effect({effect, placement, synth}) {
             
               return(
               <Grid item key={setting[0]}> 
-              <p>{setting[0]}: {effect[setting[0]]?.value? effect[setting[0]].value : effect[setting[0]]} </p>
-              <input id={setting[0]} onChange={e=>editEffectSetting(e)} value={effect[setting[0]]?.value? effect[setting[0]]?.value : effect[setting[0]]} type='range' />
+              <p>{setting[0]}: {effect[setting[0]]?.value ?? effect[setting[0]]} </p>
+              <input id={setting[0]} onChange={e=>editEffectSetting(e)} value={effect[setting[0]]?.value ?? effect[setting[0]]} type='range'/>
               </Grid>
               ) 
             })}
@@ -105,4 +100,20 @@ export default function Effect({effect, placement, synth}) {
 {displayEffect()}
     </Grid>
   )
+}
+
+
+let styles = {
+  Reverb: {
+    backgroundColor:'red',
+  },
+  Distortion: {
+    backgroundColor:'blue'
+  },
+  BitCrusher: {
+    backgroundColor:'orange'
+  },
+  FeedbackDelay: {
+    backgroundColor:'purple'
+  },
 }

@@ -19,7 +19,6 @@ export default function Synth({synth}) {
         setOscType(value)
     } else if (prop==='phase') {
       synth.oscillator.phase=value
-      console.log(synth.oscillator.phase)
       setPhase(value)
     } else if (prop==='volume') {
       synth.volume.value=value
@@ -52,7 +51,6 @@ export default function Synth({synth}) {
       setPower(false)
     }
   }
-console.log(synth)
   return (
     <Grid container alignItems='center' direction='column'>
       <Grid item>
