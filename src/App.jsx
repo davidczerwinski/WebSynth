@@ -8,31 +8,47 @@ import { v4 as uuidv4 } from 'uuid';
 import { Grid,Button } from '@mui/material';
 
 function App() {
-  const [gain, setGain] = useState({})
+  const [masterGain, setMasterGain] = useState({})
   const [synthBank, setSynthBank]=useState([])
+  const [volumeMixer, setVolumeMixer] = useState([])
 
+  console.log('volume Mixer: ', volumeMixer)
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
+    const mixerCopy = [...volumeMixer]
     const synth = new Tone.Synth()
-    synth.id= uuidv4()
+    const trackGain = new Tone.Gain(0)
+    synth.id = uuidv4()
+    trackGain.id = uuidv4()
+    trackGain.synth_id = synth.id
     synth.effectsRack=[]
     synth.power=false
     synth.volume.value='-60'
-    synth.chain(gain)
+    synth.chain(trackGain, masterGain)
     synthBankCopy.push(synth)
+    mixerCopy.push(trackGain)
     setSynthBank(synthBankCopy)
+    setVolumeMixer(mixerCopy)
   }
   const deleteSynth=(e)=>{
     const synthBankCopy=[...synthBank];
+    const mixerCopy=[...volumeMixer];
     synthBank[e.target.id].dispose()
     synthBankCopy.splice(e.target.id,1)
+    mixerCopy[e.target.id].dispose()
+    mixerCopy.splice(e.target.id,1)
     setSynthBank(synthBankCopy)
+    setVolumeMixer(mixerCopy)
   }
 
   const addEffect=(e, id)=>{
     let synthBankCopy=[...synthBank];
     let foundSynth = synthBankCopy.find(synth=>{
       return synth.id===id;
+    })
+    let mixerCopy=[...volumeMixer];
+    let foundTrack = mixerCopy.find(track=>{
+      return track.synth_id===id;
     })
     const {value} = e.target;
     if(!value){
@@ -74,28 +90,44 @@ function App() {
       foundSynth.effectsRack.push(delay);
     }
     
-    foundSynth.chain(...foundSynth.effectsRack, gain);
+    foundSynth.chain(...foundSynth.effectsRack, foundTrack, masterGain);
     setSynthBank(synthBankCopy);
     
   }
 
-  useEffect(()=>{
-    setGain(new Tone.Gain(0).toDestination())
-  }, [])
+  const handleTrackVolumeChange = (e) =>{
+    let mixerCopy= [...volumeMixer]
+    let foundTrack = mixerCopy.find(track=>{return track.id==e.target.id})
+    foundTrack.gain.value= e.target.value
+    setVolumeMixer(mixerCopy)
+  }
 
-  console.log(synthBank)
+  const deleteEffect = (event, synthId, effectId) => {
+    //find synth in synthbank
+      //find effect in synth
+        //dispose effect and splice from synth.effectArray
+
+  }
+  useEffect(()=>{
+    let initMaster = new Tone.Gain(0).toDestination()
+    initMaster.id = uuidv4()
+    setMasterGain(initMaster)
+  }, [])
+  
   return (
     <Grid container className="App">
         
-      <Master id='header' gain={gain} setGain={setGain} newSynth={newSynth}/>
+      <Master id='header' gain={masterGain} setGain={setMasterGain} newSynth={newSynth}/>
         
         {synthBank&&synthBank.length>0?(
         
           <Grid container className='synthBank' gap={2} >
             {synthBank.map((synth,i)=>{
+              let trackVolume = volumeMixer.find((track)=> { return track.synth_id=== synth.id })
+                
 
               return (
-                <Grid key={`synth_${i}`} container gap={2} item xs={12} className='synthRack'>
+                <Grid key={`synth_${i}`} alignItems='center' container gap={2} item xs={12} className='synthRack'>
                   <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >
                     <Synth id={synth.id} synth={synth}/>
                     <select  id='effect_selection' value='' onChange={e=>addEffect(e,synth.id)}>
@@ -107,20 +139,25 @@ function App() {
                     </select>
                     <Button variant='contained' color='error' onClick={e=>deleteSynth(e)} id={i} className='btn'>delete</Button>
                   </Grid>
-                  <Grid item xs={2} className='visualizer'>
+                  <Grid item xs={1}> 
+                  <input type='range' id={trackVolume.id} max={10} min={0} step={.01} style={{rotate:'270deg'}} value = {trackVolume.gain.value} onChange={e=>handleTrackVolumeChange(e)}/>
+                  </Grid>
+                  <Grid item xs={2} className='visualizer'  textAlign='center'>
                     <p>placeholder for visualizer</p>
                   </Grid>
-                  <Grid item xs={8} container alignContent='center' className='effectsRack'>
+                  <Grid item xs={7} container className='effectsRack'>
+                    <Grid item container  gap={1} style={{width:'inherit', overflowX:'auto', flexWrap:'nowrap'}}>
                     {synth.effectsRack.length>0?(
                       synth.effectsRack.map((effect,i)=>{
                       return (
-                        <Grid item> 
+                        <Grid item className='effect'> 
                           <Effect id={effect.id} effect={effect} synth={synth} placement={i} key={`effect_${i}`}/>
                         </Grid>
                       )  
                     })
                   ):(null)
-              }
+                }
+                  </Grid>
                   </Grid>
                 </Grid>     
               )
