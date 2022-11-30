@@ -4,6 +4,8 @@
 }
 
 .App {
+  height: 100%;
+  width: 100%;
   padding: 2rem;
   overflow-y: scroll;
 }
@@ -18,7 +20,8 @@
 }
 .float-btn {
   position:fixed;
-	right:40px;
+  width: 50vw;
+  left: 25vw;
 	text-align:center;
   background-color:white;
   color:black;
@@ -33,7 +36,6 @@
 }
 
 .synthRack {
-  border:1px lid white;
   padding: 5px;
   background-color:#eee5;
 }
@@ -43,7 +45,10 @@
   background-color:  rgb(39, 40, 47);
 }
 .effectsRack {
+  flex-wrap: nowrap;
+  flex-direction: row;
   background-color: rgb(149, 157, 164);
+  border-radius: 5px;
 }
 
 .visualizer {
@@ -53,8 +58,8 @@
 }
 
 .effect {
+  height: inherit;
   display: flex;
   flex-direction: row;
   width: auto;
-  border: 1px solid black;
 }
