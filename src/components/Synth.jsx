@@ -51,6 +51,7 @@ export default function Synth({synth}) {
       setPower(false)
     }
   }
+  
   return (
     <Grid container alignItems='center' direction='column'>
       <Grid item>
@@ -68,11 +69,11 @@ export default function Synth({synth}) {
       <Grid item container>
         <Grid item>
           <h6>Volume</h6>
-          <input value={volLevel} step={1} min={'-60'} max={60}onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
+          <input value={volLevel} max={35} min={'-60'} step={.01} onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
         </Grid>
         <Grid item>
           <h6>Frequency</h6>
-          <input value={freqLevel} step={.001} max={880} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
+          <input value={freqLevel} step={.001} max={2000} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
         </Grid>
         <Grid item>
           <h6>Detune</h6>
