@@ -73,7 +73,7 @@ export default function Synth({synth}) {
         </Grid>
         <Grid item>
           <h6>Frequency</h6>
-          <input value={freqLevel} step={.001} max={2000} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
+          <input value={freqLevel} step={.00001} max={1000} min={15} onChange={(e)=> updateSynth(e)} id='frequency' type='range'/>
         </Grid>
         <Grid item>
           <h6>Detune</h6>

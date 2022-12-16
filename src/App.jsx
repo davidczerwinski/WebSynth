@@ -13,20 +13,6 @@ function App() {
   const [volumeMixer, setVolumeMixer] = useState([])
 
 
-  function formatVolume(volume) {
-
-    if (volume <= 0) {
-      return -Infinity;
-    }
-
-    const decibelLevel = 20 * Math.log10(volume);
-    
-    const formattedLevel = (Math.pow(10, decibelLevel / 10)) / 10;
-  
-    return formattedLevel;
-  }
-
-
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
     const mixerCopy = [...volumeMixer]
@@ -37,7 +23,7 @@ function App() {
     trackGain.synth_id = synth.id
     synth.effectsRack=[]
     synth.power=false
-    synth.volume.value='-100'
+    synth.volume.value='-60'
     synth.chain(trackGain, masterGain)
     synthBankCopy.push(synth)
     mixerCopy.push(trackGain)
@@ -103,9 +89,18 @@ function App() {
       delay.power = false
       foundSynth.effectsRack.push(delay);
     }
+    if(value==='chebyshev'){
+      let chebyshev = new Tone.Chebyshev();
+      chebyshev.wet.value=0
+      chebyshev.id = uuidv4();
+      chebyshev.synth_id=foundSynth.id;
+      chebyshev.power = false
+      foundSynth.effectsRack.push(chebyshev);
+    }
     
-    foundSynth.chain(...foundSynth.effectsRack, foundTrack, masterGain);
-    setSynthBank(synthBankCopy);
+
+    foundSynth.chain(...foundSynth.effectsRack, foundTrack, masterGain)
+    setSynthBank(synthBankCopy)
     
   }
   
@@ -156,6 +151,7 @@ function App() {
                       <option value='distortion'>Distortion</option>
                       <option value='bitCrusher'>BitCrusher</option>
                       <option value='delay'>Delay</option>
+                      <option value='chebyshev'>Chebyshev</option>
                     </select>
                     <Button variant='contained' color='error' onClick={e=>deleteSynth(e)} id={i} className='btn'>delete</Button>
                   </Grid>
