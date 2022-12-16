@@ -28,12 +28,9 @@ An open-source modular synthesizer including multiple effects
 
 ## Future Development
 
-- Add gain node between synth/effect chain and master gain to try and normalize volume
-- Nonlinear volume controls
-- Delete effect
 - Bypass effect
 - Reposition effects in chain
-- Non-linear volume controls
+- Add Sequencing
 - ADD ALL THE EFFECTS!
 - Different sounds!
 - Save that beautiful rack

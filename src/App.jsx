@@ -12,7 +12,21 @@ function App() {
   const [synthBank, setSynthBank]=useState([])
   const [volumeMixer, setVolumeMixer] = useState([])
 
-  console.log('volume Mixer: ', volumeMixer)
+
+  function formatVolume(volume) {
+
+    if (volume <= 0) {
+      return -Infinity;
+    }
+
+    const decibelLevel = 20 * Math.log10(volume);
+    
+    const formattedLevel = (Math.pow(10, decibelLevel / 10)) / 10;
+  
+    return formattedLevel;
+  }
+
+
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
     const mixerCopy = [...volumeMixer]
@@ -23,7 +37,7 @@ function App() {
     trackGain.synth_id = synth.id
     synth.effectsRack=[]
     synth.power=false
-    synth.volume.value='-60'
+    synth.volume.value='-100'
     synth.chain(trackGain, masterGain)
     synthBankCopy.push(synth)
     mixerCopy.push(trackGain)
@@ -94,7 +108,7 @@ function App() {
     setSynthBank(synthBankCopy);
     
   }
-
+  
   const handleTrackVolumeChange = (e) =>{
     let mixerCopy= [...volumeMixer]
     let foundTrack = mixerCopy.find(track=>{return track.id==e.target.id})
@@ -103,11 +117,18 @@ function App() {
   }
 
   const deleteEffect = (event, synthId, effectId) => {
-    //find synth in synthbank
-      //find effect in synth
-        //dispose effect and splice from synth.effectArray
-
+    let synthBankCopy=[...synthBank];
+    let mixerCopy=[...volumeMixer];
+    let foundSynth = synthBankCopy.find(synth=>synth.id===synthId)
+    let foundTrack = mixerCopy.find(track=>track.synth_id===synthId)
+    foundSynth.effectsRack = foundSynth.effectsRack.filter(option=>{
+      option.disconnect()
+      return option.id!==effectId
+    })
+    foundSynth.chain(...foundSynth.effectsRack, foundTrack, masterGain)
+    setSynthBank(synthBankCopy)
   }
+
   useEffect(()=>{
     let initMaster = new Tone.Gain(0).toDestination()
     initMaster.id = uuidv4()
@@ -117,14 +138,13 @@ function App() {
   return (
     <Grid container className="App">
         
-      <Master id='header' gain={masterGain} setGain={setMasterGain} newSynth={newSynth}/>
+      <Master id='header' gain={masterGain} newSynth={newSynth}/>
         
         {synthBank&&synthBank.length>0?(
         
           <Grid container className='synthBank' gap={2} >
             {synthBank.map((synth,i)=>{
               let trackVolume = volumeMixer.find((track)=> { return track.synth_id=== synth.id })
-                
 
               return (
                 <Grid key={`synth_${i}`} alignItems='center' container gap={2} item xs={12} className='synthRack'>
@@ -140,7 +160,7 @@ function App() {
                     <Button variant='contained' color='error' onClick={e=>deleteSynth(e)} id={i} className='btn'>delete</Button>
                   </Grid>
                   <Grid item xs={1}> 
-                  <input type='range' id={trackVolume.id} max={10} min={0} step={.01} style={{rotate:'270deg'}} value = {trackVolume.gain.value} onChange={e=>handleTrackVolumeChange(e)}/>
+                  <input type='range' id={trackVolume.id} step={.01} min={0} max={10}className='slider' style={{rotate:'270deg'}} value = {trackVolume.gain.value} onChange={e=>handleTrackVolumeChange(e)}/>
                   </Grid>
                   <Grid item xs={2} className='visualizer'  textAlign='center'>
                     <p>placeholder for visualizer</p>
@@ -151,7 +171,7 @@ function App() {
                       synth.effectsRack.map((effect,i)=>{
                       return (
                         <Grid item className='effect'> 
-                          <Effect id={effect.id} effect={effect} synth={synth} placement={i} key={`effect_${i}`}/>
+                          <Effect id={effect.id} effect={effect} synth={synth} deleteEffect={deleteEffect} placement={i} key={`effect_${i}`}/>
                         </Grid>
                       )  
                     })

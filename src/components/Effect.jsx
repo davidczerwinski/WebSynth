@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
-import { Grid, Typography} from '@mui/material'
+import { Grid, Typography, Button} from '@mui/material'
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
-export default function Effect({effect, placement, synth}) {
+export default function Effect({effect, placement, synth, deleteEffect}) {
   const [effectObj, setEffectObj] = useState({...effect});
   const props = effect.get()
+  const [bypass,setBypass]=useState(true)
     //effect node bypass
   // const togglePower=(e)=>{
   //   let effectCopy = {...effectObj}
@@ -21,6 +22,18 @@ export default function Effect({effect, placement, synth}) {
   //     setEffectObj(effectCopy)
   //   }
   // }
+
+  const bypassEffect = ()=>{
+    const effectCopy = {...effectObj}
+    if(!bypass){
+      effectCopy.bypass=true
+      setBypass(true)
+    }else{
+    effectCopy.bypass=false
+    setBypass(false)
+    }
+    setEffectObj(effectCopy)
+  }
 
   const editEffectSetting = (e)=>{
     const effectCopy= {...effectObj}
@@ -39,15 +52,14 @@ export default function Effect({effect, placement, synth}) {
     const displayEffect = ()=>{ 
       let effectSettings = Object.entries(props).map(item=> {
         return item})
-
       return (
 
-        <Grid item container sx={styles[effect.name]} style={{padding: '10px 5px', borderRadius:'5px', border:'1px solid #27282F5e'}} textAlign='center' direction='column' justifyContent='space-around'>
+        <Grid item container sx={styles[effect.name]} style={{padding: '10px 5px', borderRadius:'5px'}} textAlign='center' direction='column' justifyContent='space-around'>
           <Grid item> 
           <Typography>{effect.name}</Typography>
           </Grid>
           <Grid item>
-            <PowerSettingsNewIcon  fontSize='large' className='pwr-btn' color={((effect.wet.value>0)?'success':'default')}/>
+            <PowerSettingsNewIcon  fontSize='large' onClick={bypassEffect} className='pwr-btn' color={(!bypass?'success':'default')}/>
           </Grid>
           <Grid item direction='column' container>
 
@@ -96,8 +108,11 @@ export default function Effect({effect, placement, synth}) {
     }
 
   return (
-    <Grid className='effect' container>
+    <Grid className='effect' item container justifyContent='space-around' display='flex' direction='column' spacing='space-between' style={{width:'min-content'}}>
 {displayEffect()}
+<Grid item> 
+<Button style={{width:'100%'}} variant='contained' name='delete'  color='error' onClick={e=>deleteEffect(e, synth.id, effect.id)} className='btn'>delete</Button>
+</Grid>
     </Grid>
   )
 }
@@ -105,15 +120,23 @@ export default function Effect({effect, placement, synth}) {
 
 let styles = {
   Reverb: {
-    backgroundColor:'red',
+    background:`linear-gradient(360deg, #203473 20% , #5A5F97)`,
   },
   Distortion: {
-    backgroundColor:'blue'
+    background:`linear-gradient(to bottom, #F29840 , #F27329)`
   },
   BitCrusher: {
-    backgroundColor:'orange'
+    backgroundRepeat: 'repeat',
+    background:'linear-gradient(60deg, #F29840 50%, transparent 50%), linear-gradient(120deg, transparent 49%, #F29840 50%), #F27329',
+    backgroundSize:'30px 30px',
+    backgroundPosition:'0px 10px',
+    border:`1px solid #27282F5e`,
+    fontSize:'1.5rem'
   },
   FeedbackDelay: {
-    backgroundColor:'purple'
+    backgroundSize:'',
+    opacity: '0.8',
+    background: 'conic-gradient( from 135deg, #020681 0,#020681 90deg, #000337 90deg, #000337 180deg, #0818ff 180deg, #0818ff 270deg, #0f9bfe 270deg, #0f9bfe 360deg)'
+    // background:'#5A5F97'
   },
 }

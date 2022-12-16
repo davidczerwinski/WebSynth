@@ -4,30 +4,62 @@
 }
 
 .App {
-  height: 100%;
-  width: 100%;
   padding: 2rem;
   overflow-y: scroll;
 }
-.btn {
+/* .btn {
   text-align:center;
   background-color:white;
   color:black;
+} */
+
+/* .slider{
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+
 }
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 15px;
+  width: 15px;
+  color: pink;
+  margin-top: -5px;
+  border-radius: 50%;
+}
+
+.slider:focus{
+  outline: none;
+}
+
+.slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+
+  background: linear-gradient(90deg, green,green, green,  yellow, red);
+  height: 50%;
+} 
+.slider::-moz-range-track {
+  background: tomato;
+} */
 
 .pwr-btn {
   filter: drop-shadow(0 0 5px rgba(34, 153, 30, 0.735));
 }
-.float-btn {
+.masterVolume {
   position:fixed;
   width: 50vw;
   left: 25vw;
 	text-align:center;
   background-color:white;
   color:black;
+  box-shadow: 3pxs 3px 3px #999;
+  border-radius: 5px;
+  z-index: 2;
 }
-#header {
-  box-shadow: 3px 3px 3px #999
+
+#newSynthButton {
+  background-color: #0D0D0D !important
 }
 
 .synthBank {
