@@ -1,40 +1,69 @@
-import { Grid } from '@mui/material'
+import { Grid, Select,MenuItem, FormControl, InputLabel,Zoom, Grow } from '@mui/material'
 import React ,{useState} from 'react'
-export default function Master({gain, newSynth}) {
-  let [gainLevel, setGainLevel]= useState(gain?.gain?.value??0)
+export default function Master({gain, newInstrument}) {
+  const [gainLevel, setGainLevel]= useState(gain?.gain?.value??0)
+  const [instrumentSelect, setInstrumentSelect]= useState(false)
 
 
   function formatVolume(volume) {
-
     if (volume < 0) {
       return -Infinity;
     }
-    // Convert the volume value to a decibel level using the formula:
-    // decibelLevel = 20 * log10(volume)
     const decibelLevel = 20 * Math.log10(volume);
-    // Non-linearly format the decibel level for human hearing using the formula:
-    // formattedLevel = (10 ** (decibelLevel / 10)) / 10
-    const formattedLevel = (Math.pow(10, decibelLevel / 10)) / 10;
-  
-    // Return the formatted volume level
+    const formattedLevel = (Math.pow(10, decibelLevel / 20));
     return formattedLevel;
   }
 
 
   const handleChange = (e) => {
+    document.getElementById(e.target.id).style.cursor='none'
     let gainVal= e.target.value
-    gain.gain.value = formatVolume(gainVal)
+    gainVal = formatVolume(gainVal)
+    gain.gain.value = gainVal
     setGainLevel(gainVal)
+    console.log(gainLevel)
+    document.getElementById(e.target.id).style.cursor='auto'
+
   }
 
   return (
     <div className='masterVolume'>
-      <Grid item>
+      <Grid item mt={1}>
         <label>Master Volume</label>
-        <input onChange={e=>handleChange(e)} step={.01} min ={0} max={5} value={ gainLevel } type="range" />
+        <input onChange={e=>handleChange(e)} step={.001} min ={0} max={1} value={ gainLevel } type="range" id='master' />
       </Grid>
-      <Grid item> 
-      <button id='newSynthButton' onClick={newSynth}>New Synth</button>
+      <Grid item my={1} >
+        {instrumentSelect?
+        (
+          <Zoom in={instrumentSelect}> 
+          <FormControl sx={{width:200, color:'white' }}>
+            <InputLabel style={{color:'white'}} id ='addInstrumentLabel'>Add Instrument</InputLabel>
+            <Select
+            defaultOpen={true}
+              variant='standard'
+              labelId='addInstrumentLabel'
+              label='Add Instrument'
+              value=''
+              onChange={(e)=>{
+                setInstrumentSelect(false)
+                newInstrument(e.target.value)
+              }}
+            >
+            <MenuItem value='newSynth' >Synth</MenuItem>
+          </Select>
+          </FormControl>
+          </Zoom>
+        ):(
+        <Grow in={!instrumentSelect}> 
+        <button id='newSynthButton' onClick={(e)=>{
+          setInstrumentSelect(true)
+          newInstrument(e.target.value)
+        }}>
+          New Instrument
+        </button>
+        </Grow>
+        )}
+        
       </Grid>
     </div>
   )
