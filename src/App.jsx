@@ -16,20 +16,20 @@ function App() {
   const newSynth =()=>{
     const synthBankCopy= [...synthBank]
     const mixerCopy = [...volumeMixer]
-    const synth = new Tone.Synth()
-    const trackGain = new Tone.Gain(0)
+    const trackGain = new Tone.Gain(0).connect(masterGain)
+    const synth = new Tone.Synth().connect(trackGain)
     synth.id = uuidv4()
     trackGain.id = uuidv4()
     trackGain.synth_id = synth.id
     synth.effectsRack=[]
     synth.power=false
     synth.volume.value='-60'
-    synth.chain(trackGain, masterGain)
     synthBankCopy.push(synth)
     mixerCopy.push(trackGain)
     setSynthBank(synthBankCopy)
     setVolumeMixer(mixerCopy)
   }
+
   const deleteSynth=(e)=>{
     const synthBankCopy=[...synthBank];
     const mixerCopy=[...volumeMixer];
@@ -40,12 +40,26 @@ function App() {
     setSynthBank(synthBankCopy)
     setVolumeMixer(mixerCopy)
   }
-
+const newInstrument= (v)=>{
+    //depending on value, make new instrument
+    console.log(v)
+    switch (v){
+      case 'newSynth': 
+        newSynth()
+        break
+      case 'metalSynth':
+        newMetalSynth()
+        break
+      default:
+        break
+    }
+  }
   const addEffect=(e, id)=>{
     let synthBankCopy=[...synthBank];
     let foundSynth = synthBankCopy.find(synth=>{
       return synth.id===id;
     })
+    
     let mixerCopy=[...volumeMixer];
     let foundTrack = mixerCopy.find(track=>{
       return track.synth_id===id;
@@ -61,7 +75,6 @@ function App() {
       reverb.synth_id=foundSynth.id;
       reverb.power = false
       foundSynth.effectsRack.push(reverb);
-      setSynthBank(synthBankCopy);
     }
 
     if(value==='distortion'){
@@ -99,7 +112,7 @@ function App() {
     }
     
 
-    foundSynth.chain(...foundSynth.effectsRack, foundTrack, masterGain)
+    foundSynth.chain(...foundSynth.effectsRack, foundTrack)
     setSynthBank(synthBankCopy)
     
   }
@@ -130,10 +143,17 @@ function App() {
     setMasterGain(initMaster)
   }, [])
   
+  const displayInstrument=(synth)=>{
+      if(synth.name==='Synth'){
+        return <Synth id={synth.id} synth={synth}/>
+      }
+  }
+
+
   return (
     <Grid container className="App">
         
-      <Master id='header' gain={masterGain} newSynth={newSynth}/>
+      <Master id='header' gain={masterGain} newInstrument={newInstrument}/>
         
         {synthBank&&synthBank.length>0?(
         
@@ -144,7 +164,7 @@ function App() {
               return (
                 <Grid key={`synth_${i}`} alignItems='center' container gap={2} item xs={12} className='synthRack'>
                   <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >
-                    <Synth id={synth.id} synth={synth}/>
+                    {displayInstrument(synth)}
                     <select  id='effect_selection' value='' onChange={e=>addEffect(e,synth.id)}>
                       <option value='' disabled hidden>Effects</option>
                       <option value='reverb'>Reverb</option>
@@ -162,13 +182,11 @@ function App() {
                     <p>placeholder for visualizer</p>
                   </Grid>
                   <Grid item xs={7} container className='effectsRack'>
-                    <Grid item container  gap={1} style={{width:'inherit', overflowX:'auto', flexWrap:'nowrap'}}>
+                    <Grid item container gap={1} style={{width:'inherit', overflowX:'auto', flexWrap:'nowrap'}}>
                     {synth.effectsRack.length>0?(
                       synth.effectsRack.map((effect,i)=>{
                       return (
-                        <Grid item className='effect'> 
                           <Effect id={effect.id} effect={effect} synth={synth} deleteEffect={deleteEffect} placement={i} key={`effect_${i}`}/>
-                        </Grid>
                       )  
                     })
                   ):(null)

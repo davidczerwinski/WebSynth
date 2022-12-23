@@ -54,7 +54,7 @@ export default function Effect({effect, placement, synth, deleteEffect}) {
         return item})
       return (
 
-        <Grid item container sx={styles[effect.name]} style={{padding: '10px 5px', borderRadius:'5px'}} textAlign='center' direction='column' justifyContent='space-around'>
+        <Grid item container sx={[styles[effect.name],{padding: '10px 5px', borderRadius:'5px', height:'max-content'}]} textAlign='center' direction='column' justifyContent='space-around'>
           <Grid item> 
           <Typography>{effect.name}</Typography>
           </Grid>
@@ -108,10 +108,10 @@ export default function Effect({effect, placement, synth, deleteEffect}) {
     }
 
   return (
-    <Grid className='effect' item container justifyContent='space-around' display='flex' direction='column' spacing='space-between' style={{width:'min-content'}}>
+    <Grid className='effect' item container  direction='column' spacing='space-between' style={{width:'min-content', height:'inherit'}}>
 {displayEffect()}
 <Grid item> 
-<Button style={{width:'100%'}} variant='contained' name='delete'  color='error' onClick={e=>deleteEffect(e, synth.id, effect.id)} className='btn'>delete</Button>
+<Button style={{width:'100%'}} variant='contained' size='small' name='delete'  color='error' onClick={e=>deleteEffect(e, synth.id, effect.id)} className='btn'>delete</Button>
 </Grid>
     </Grid>
   )
@@ -139,4 +139,7 @@ let styles = {
     background: 'conic-gradient( from 135deg, #020681 0,#020681 90deg, #000337 90deg, #000337 180deg, #0818ff 180deg, #0818ff 270deg, #0f9bfe 270deg, #0f9bfe 360deg)'
     // background:'#5A5F97'
   },
+  Chebyshev:{
+    backgroundColor:'blue'
+  }
 }

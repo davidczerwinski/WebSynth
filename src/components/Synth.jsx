@@ -4,12 +4,12 @@ import { Grid } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 
 export default function Synth({synth}) {
-  const [power, setPower]=useState(synth.power)
-  const [oscType, setOscType]= useState(synth.oscillator.type)
-  const [volLevel, setVolLevel]= useState(synth.volume.value)
-  const [freqLevel, setFreqLevel]= useState(synth.frequency.value)
-  const [detune, setDetune]= useState(synth.detune.value)
-  const [phase, setPhase]= useState(synth.oscillator.phase)
+  const [power, setPower]=useState(synth.power??false)
+  const [oscType, setOscType]= useState(synth.oscillator.type??'')
+  const [volLevel, setVolLevel]= useState(synth.volume.value??'')
+  const [freqLevel, setFreqLevel]= useState(synth.frequency.value??'')
+  const [detune, setDetune]= useState(synth.detune.value??'')
+  const [phase, setPhase]= useState(synth.oscillator.phase??'')
 
   const updateSynth=(e)=>{
     const {value}=e.target

@@ -19,7 +19,7 @@ An open-source modular synthesizer including multiple effects
 ## Usage
 
 
-**! ! PLEASE WATCH YOUR VOLUME ! !**
+**! ! PLEASE WATCH YOUR VOLUME ! !** 
 <br>
 - Add an oscillator<br>*Add another if you want!*
 - Choose from the desired effects everyone knows and loves!<br>*WIP! Expect more to come!* 
@@ -28,12 +28,14 @@ An open-source modular synthesizer including multiple effects
 
 ## Future Development
 
-- Bypass effect
+- (っ◔◡◔)っ ♥ styling ♥
 - Reposition effects in chain
+- Add wave visualizer
+- Bypass effect
 - Add Sequencing
-- ADD ALL THE EFFECTS!
-- Different sounds!
 - Save that beautiful rack
+- Different sounds!
+- ADD ALL THE EFFECTS!
 
 ## Deployment
 

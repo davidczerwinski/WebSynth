@@ -48,12 +48,12 @@
 }
 .masterVolume {
   position:fixed;
-  width: 50vw;
-  left: 25vw;
+  width: 25vw;
+  left: 37.5vw;
 	text-align:center;
-  background-color:white;
+  background-color:#73726E;
   color:black;
-  box-shadow: 3pxs 3px 3px #999;
+  box-shadow: 0 8px 3px #21212093;
   border-radius: 5px;
   z-index: 2;
 }
@@ -77,8 +77,7 @@
   background-color:  rgb(39, 40, 47);
 }
 .effectsRack {
-  flex-wrap: nowrap;
-  flex-direction: row;
+  padding: 10px;
   background-color: rgb(149, 157, 164);
   border-radius: 5px;
 }
