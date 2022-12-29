@@ -11,6 +11,14 @@ export default function Synth({synth}) {
   const [detune, setDetune]= useState(synth.detune.value??'')
   const [phase, setPhase]= useState(synth.oscillator.phase??'')
 
+  function formatVolume(volume) {
+    if (volume<=.0001) {
+      return -Infinity
+    }
+    return 20 * Math.log10(volume*4)
+  }
+
+  
   const updateSynth=(e)=>{
     const {value}=e.target
     let prop = e.target.id
@@ -21,8 +29,8 @@ export default function Synth({synth}) {
       synth.oscillator.phase=value
       setPhase(value)
     } else if (prop==='volume') {
-      synth.volume.value=value
-        setVolLevel(value)
+      setVolLevel(value)
+      synth.volume.value=formatVolume(value)
     } else if(prop === 'frequency'){
       synth[prop].value=value
       setFreqLevel(value)
@@ -69,7 +77,7 @@ export default function Synth({synth}) {
       <Grid item container>
         <Grid item>
           <h6>Volume</h6>
-          <input value={volLevel} max={35} min={'-60'} step={.01} onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
+          <input value={volLevel} max={1} min={0} step={.001} onChange={(e)=> updateSynth(e)} id='volume' type='range'/>
         </Grid>
         <Grid item>
           <h6>Frequency</h6>
