@@ -17,18 +17,19 @@ if(canvasContext){
   canvasContext.strokeStyle = '#F29840';
   // canvasContext.fillStyle = '#F29840';
   canvasContext.lineWidth = 2;
+  canvasContext.beginPath()
+
 }
       
       //look for change in polarity from - to +
       let start=0
-      for (let i=1; i<data.length; i++){
+      for (let i=1; i<data.length/750; i++){
         if( data.length[i-1]<0&&data.length[i]>=0){
           start=i
           break
         }
       }
       let end= start+data.length/2
-      canvasContext.beginPath()
       for (let i = start; i < end; i++) {
         const pastValue =  (data[i-1]*canvas.height/1.25);
         const currentValue =  (data[i]*canvas.height/1.25);
@@ -39,9 +40,10 @@ if(canvasContext){
         canvasContext.moveTo(x1,y1)
         canvasContext.lineTo(x2,y2)
         // canvasContext.toLine(scale(i-1,0,data.length,0,canvas.width*2),scale(pastValue, 0, canvas.height, canvas.height, 0)/2)
-          canvasContext.fillRect(scale(i-1,0,data.length,0,canvas.width*2),scale(pastValue, 0, canvas.height, canvas.height, 0)/2,3,3)
-        canvasContext.stroke()
-      }
+          // canvasContext.fillRect(scale(i-1,0,data.length,0,canvas.width*2),scale(pastValue, 0, canvas.height, canvas.height, 0)/2,3,3)
+          canvasContext.stroke()
+        }
+
         // canvasContext.fill()
       requestAnimationFrame(draw.current);  
     })

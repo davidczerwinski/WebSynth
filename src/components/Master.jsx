@@ -26,6 +26,8 @@ export default function Master({gain, newInstrument}) {
 
   }
 
+
+  
   return (
     <div className='masterVolume'>
       <Grid item mt={1}>
