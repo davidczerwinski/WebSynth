@@ -3,6 +3,7 @@ import {  useEffect, useState } from 'react';
 import Synth from './components/Synth'
 import Master from './components/Master'
 import Effect from './components/Effect'
+import Visualizer from './components/Visualizer'
 import * as Tone from 'tone'
 import { v4 as uuidv4 } from 'uuid';
 import { Grid,Button } from '@mui/material';
@@ -18,22 +19,25 @@ function App() {
     const mixerCopy = [...volumeMixer]
     const trackGain = new Tone.Gain(0).connect(masterGain)
     const synth = new Tone.Synth().connect(trackGain)
+    const analyser = new Tone.Analyser('waveform')
+    synth.connect(analyser)
     synth.id = uuidv4()
     trackGain.id = uuidv4()
     trackGain.synth_id = synth.id
     synth.effectsRack=[]
     synth.power=false
+    synth.analyser=analyser
     synth.volume.value='-60'
     synthBankCopy.push(synth)
     mixerCopy.push(trackGain)
     setSynthBank(synthBankCopy)
     setVolumeMixer(mixerCopy)
   }
-
   const deleteSynth=(e)=>{
     const synthBankCopy=[...synthBank];
     const mixerCopy=[...volumeMixer];
     synthBank[e.target.id].dispose()
+    
     synthBankCopy.splice(e.target.id,1)
     mixerCopy[e.target.id].dispose()
     mixerCopy.splice(e.target.id,1)
@@ -42,7 +46,6 @@ function App() {
   }
 const newInstrument= (v)=>{
     //depending on value, make new instrument
-    console.log(v)
     switch (v){
       case 'newSynth': 
         newSynth()
@@ -141,6 +144,7 @@ const newInstrument= (v)=>{
     let initMaster = new Tone.Gain(0).toDestination()
     initMaster.id = uuidv4()
     setMasterGain(initMaster)
+    
   }, [])
   
   const displayInstrument=(synth)=>{
@@ -148,7 +152,6 @@ const newInstrument= (v)=>{
         return <Synth id={synth.id} synth={synth}/>
       }
   }
-
 
   return (
     <Grid container className="App">
@@ -160,7 +163,7 @@ const newInstrument= (v)=>{
           <Grid container className='synthBank' gap={2} >
             {synthBank.map((synth,i)=>{
               let trackVolume = volumeMixer.find((track)=> { return track.synth_id=== synth.id })
-
+              
               return (
                 <Grid key={`synth_${i}`} alignItems='center' container gap={2} item xs={12} className='synthRack'>
                   <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >
@@ -178,20 +181,22 @@ const newInstrument= (v)=>{
                   <Grid item xs={1}> 
                   <input type='range' id={trackVolume.id} step={.01} min={0} max={10}className='slider' style={{rotate:'270deg'}} value = {trackVolume.gain.value} onChange={e=>handleTrackVolumeChange(e)}/>
                   </Grid>
-                  <Grid item xs={2} className='visualizer'  textAlign='center'>
-                    <p>placeholder for visualizer</p>
-                  </Grid>
-                  <Grid item xs={7} container className='effectsRack'>
-                    <Grid item container gap={1} style={{width:'inherit', overflowX:'auto', flexWrap:'nowrap'}}>
+                  <Grid item xs={2} className='visualizer' id='canvasContainer'>
+                    <Visualizer synth={synth} isMounted={true}/>
+                    </Grid>
+                  <Grid item xs={7} container>
                     {synth.effectsRack.length>0?(
+                    <Grid item container gap={1} className='effectsRack' style={{ width:'inherit', overflowX:'auto', flexWrap:'nowrap'}}>
+                      {
                       synth.effectsRack.map((effect,i)=>{
                       return (
                           <Effect id={effect.id} effect={effect} synth={synth} deleteEffect={deleteEffect} placement={i} key={`effect_${i}`}/>
                       )  
                     })
+                    }
+                    </Grid>
                   ):(null)
                 }
-                  </Grid>
                   </Grid>
                 </Grid>     
               )

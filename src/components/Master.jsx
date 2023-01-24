@@ -6,7 +6,7 @@ export default function Master({gain, newInstrument}) {
 
 
   function formatVolume(volume) {
-    if (volume < 0) {
+    if (volume <= 0) {
       return -Infinity;
     }
     const decibelLevel = 20 * Math.log10(volume);
@@ -26,6 +26,8 @@ export default function Master({gain, newInstrument}) {
 
   }
 
+
+  
   return (
     <div className='masterVolume'>
       <Grid item mt={1}>

@@ -54,7 +54,7 @@ export default function Effect({effect, placement, synth, deleteEffect}) {
         return item})
       return (
 
-        <Grid item container sx={[styles[effect.name],{padding: '10px 5px', borderRadius:'5px', height:'max-content'}]} textAlign='center' direction='column' justifyContent='space-around'>
+        <Grid item container sx={[styles[effect.name],{padding: '10px 5px', borderRadius:'5px', height:'max-content'}]} textAlign='center' direction='column' justifyContent='space-around' xs={10}>
           <Grid item> 
           <Typography>{effect.name}</Typography>
           </Grid>
@@ -108,9 +108,9 @@ export default function Effect({effect, placement, synth, deleteEffect}) {
     }
 
   return (
-    <Grid className='effect' item container  direction='column' spacing='space-between' style={{width:'min-content', height:'inherit'}}>
+    <Grid className='effect' item container  direction='column' spacing='space-between' style={{width:'min-content', height:'inherit', padding:'10px'}} xs={12}>
 {displayEffect()}
-<Grid item> 
+<Grid item xs={1}> 
 <Button style={{width:'100%'}} variant='contained' size='small' name='delete'  color='error' onClick={e=>deleteEffect(e, synth.id, effect.id)} className='btn'>delete</Button>
 </Grid>
     </Grid>
