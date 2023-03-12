@@ -49,10 +49,6 @@ export default function Visualizer({synth}) {
       requestAnimationFrame(draw.current);  
     })
 
-
-    
-
-    
     useEffect(()=>{
       requestAnimationFrame(draw.current);  
       
