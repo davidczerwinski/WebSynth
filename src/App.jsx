@@ -19,7 +19,26 @@ function App() {
     const mixerCopy = [...volumeMixer]
     const trackGain = new Tone.Gain(0).connect(masterGain)
     const synth = new Tone.Synth().connect(trackGain)
-    const analyser = new Tone.Analyser('waveform')
+    const analyser = new Tone.Waveform(Math.pow(2,10))
+    synth.connect(analyser)
+    synth.id = uuidv4()
+    trackGain.id = uuidv4()
+    trackGain.synth_id = synth.id
+    synth.effectsRack=[]
+    synth.power=false
+    synth.analyser=analyser
+    synth.volume.value='-60'
+    synthBankCopy.push(synth)
+    mixerCopy.push(trackGain)
+    setSynthBank(synthBankCopy)
+    setVolumeMixer(mixerCopy)
+  }
+  const newNoiseSynth =()=>{
+    const synthBankCopy= [...synthBank]
+    const mixerCopy = [...volumeMixer]
+    const trackGain = new Tone.Gain(0).connect(masterGain)
+    const synth = new Tone.FatOscillator().connect(trackGain)
+    const analyser = new Tone.Waveform(Math.pow(2,11))
     synth.connect(analyser)
     synth.id = uuidv4()
     trackGain.id = uuidv4()
@@ -36,7 +55,11 @@ function App() {
   const deleteSynth=(e)=>{
     const synthBankCopy=[...synthBank];
     const mixerCopy=[...volumeMixer];
-    synthBank[e.target.id].dispose()
+    synthBank[e.target.id].analyser.dispose()
+    synthBank[e.target.id].triggerRelease()
+    setTimeout(()=>{
+      synthBank[e.target.id].disconnect()}
+      , 1000)
     
     synthBankCopy.splice(e.target.id,1)
     mixerCopy[e.target.id].dispose()
@@ -50,8 +73,8 @@ const newInstrument= (v)=>{
       case 'newSynth': 
         newSynth()
         break
-      case 'metalSynth':
-        newMetalSynth()
+      case 'noiseSynth':
+        newNoiseSynth()
         break
       default:
         break
@@ -148,9 +171,7 @@ const newInstrument= (v)=>{
   }, [])
   
   const displayInstrument=(synth)=>{
-      if(synth.name==='Synth'){
         return <Synth id={synth.id} synth={synth}/>
-      }
   }
 
   return (
@@ -158,12 +179,11 @@ const newInstrument= (v)=>{
         
       <Master id='header' gain={masterGain} newInstrument={newInstrument}/>
         
-        {synthBank&&synthBank.length>0?(
+        {synthBank&&synthBank?.length>0?(
         
           <Grid container className='synthBank' gap={2} >
             {synthBank.map((synth,i)=>{
               let trackVolume = volumeMixer.find((track)=> { return track.synth_id=== synth.id })
-              
               return (
                 <Grid key={`synth_${i}`} alignItems='center' container gap={2} item xs={12} className='synthRack'>
                   <Grid container gap={1} direction='column' xs={1} item className='synthBlock' key={synth.id} >

@@ -21,11 +21,12 @@ export default function Master({gain, newInstrument}) {
     gainVal = formatVolume(gainVal)
     gain.gain.value = gainVal
     setGainLevel(gainVal)
-    console.log(gainLevel)
     document.getElementById(e.target.id).style.cursor='auto'
 
   }
 
+
+  
   return (
     <div className='masterVolume'>
       <Grid item mt={1}>
@@ -37,7 +38,7 @@ export default function Master({gain, newInstrument}) {
         (
           <Zoom in={instrumentSelect}> 
           <FormControl sx={{width:200, color:'white' }}>
-            <InputLabel style={{color:'white'}} id ='addInstrumentLabel'>Add Instrument</InputLabel>
+            <InputLabel style={{color:'white'}} id ='addInstrumentLabel'>Add Track</InputLabel>
             <Select
             defaultOpen={true}
               variant='standard'
@@ -50,6 +51,7 @@ export default function Master({gain, newInstrument}) {
               }}
             >
             <MenuItem value='newSynth' >Synth</MenuItem>
+            <MenuItem disabled >More coming soon!</MenuItem>
           </Select>
           </FormControl>
           </Zoom>
@@ -59,7 +61,7 @@ export default function Master({gain, newInstrument}) {
           setInstrumentSelect(true)
           newInstrument(e.target.value)
         }}>
-          New Instrument
+          New Track
         </button>
         </Grow>
         )}

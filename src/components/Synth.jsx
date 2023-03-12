@@ -18,7 +18,6 @@ export default function Synth({synth}) {
     return 20 * Math.log10(volume*4)
   }
 
-  
   const updateSynth=(e)=>{
     const {value}=e.target
     let prop = e.target.id
